@@ -21,6 +21,11 @@ buildscript {
     }
 }
 
+plugins {
+    id 'de.undercouch.download' version '4.0.0'
+}
+
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 apply plugin: "java"
@@ -116,4 +121,13 @@ reobf {
         useNotchSrg()
     }
 }
+
+jar {
+    // Excludes the start file
+    exclude("**/launch")
+}
+
+
+
+
 

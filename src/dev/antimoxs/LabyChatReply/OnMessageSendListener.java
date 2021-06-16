@@ -24,15 +24,16 @@ public class OnMessageSendListener implements MessageSendEvent {
     public boolean onSend(String s) {
 
 
-        if (s.startsWith("/lmc ")) {
+        if (s.startsWith("/" + LabyChatReply.lmcSyntax.trim() + " ")) {
 
             String[] msg = s.split(" ");
+            int synlen = LabyChatReply.lmcSyntax.split(" ").length;
 
-            if (msg.length < 3) return true;
+            if (msg.length < 2 + synlen) return true;
 
             for (ChatUser u : LabyMod.getInstance().getLabyConnect().getFriends()) {
 
-                if (msg[1].equalsIgnoreCase(u.getGameProfile().getName())) {
+                if (msg[synlen].equalsIgnoreCase(u.getGameProfile().getName())) {
 
                     String text = s.replaceFirst(msg[0], "").replaceFirst(msg[1],"").trim();
                     sendLMCMessage(u, text);
@@ -46,7 +47,7 @@ public class OnMessageSendListener implements MessageSendEvent {
             return true;
 
         }
-        else if (s.startsWith("/lmr ")) {
+        else if (s.startsWith("/" + LabyChatReply.lmrSyntax.trim() + " ")) {
 
             if (LabyChatReply.lastUser == null) {
 
@@ -56,11 +57,12 @@ public class OnMessageSendListener implements MessageSendEvent {
             }
 
             String[] msg = s.split(" ");
+            int synlen = LabyChatReply.lmrSyntax.split(" ").length;
             ChatUser u = LabyChatReply.lastUser;
 
-            if (msg.length < 2) return true;
+            if (msg.length < 1 + synlen) return true;
 
-                String text = s.replaceFirst(msg[0], "").trim();
+                String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
                 sendLMCMessage(u, text);
                 return true;
 
