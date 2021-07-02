@@ -42,7 +42,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.1"
+version = "1.2"
 group= "dev.antimoxs.LabyChatReply" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "LabyChatReply"
 
@@ -125,6 +125,7 @@ reobf {
 jar {
     // Excludes the start file
     exclude("**/launch")
+    archiveName = "LabyChatReply.jar"
 }
 
 
