@@ -3,7 +3,7 @@
   "name": "LabyChatReply",
   "mainClass": "dev.antimoxs.LabyChatReply.LabyChatReply",
   "description": "Reply to the LabyMod Chat via '/lmc <user> <msg>' ingame with LabyChatReply by Antimoxs. For more information join our discord: https://discord.gg/ATdbUS4",
-  "version": 1.1,
+  "version": 1.2,
   "author": "Antimoxs",
   "category": 2,
   "icon": "https://i.imgur.com/dK7chrN.png"
