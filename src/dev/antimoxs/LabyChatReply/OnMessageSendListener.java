@@ -27,6 +27,12 @@ public class OnMessageSendListener implements MessageSendEvent {
     @Override
     public boolean onSend(String s) {
 
+        if (LabyChatReply.cfcUpdate) {
+
+            LabyChatReply.loadCFC();
+
+        }
+
         if (s.startsWith("/lcr ")) {
 
             if (s.equals("/lcr reload")) {
@@ -38,10 +44,10 @@ public class OnMessageSendListener implements MessageSendEvent {
 
         }
 
-        if (s.startsWith("/" + LabyChatReply.lmcSyntax.trim() + " ")) {
+        if (s.startsWith("/" + LabyChatReply.getLmcSyntax().trim() + " ")) {
 
             String[] msg = s.split(" ");
-            int synlen = LabyChatReply.lmcSyntax.split(" ").length;
+            int synlen = LabyChatReply.getLmcSyntax().split(" ").length;
 
             if (msg.length < 2 + synlen) return true;
 
@@ -61,7 +67,7 @@ public class OnMessageSendListener implements MessageSendEvent {
             return true;
 
         }
-        else if (s.startsWith("/" + LabyChatReply.lmrSyntax.trim() + " ")) {
+        else if (s.startsWith("/" + LabyChatReply.getLmrSyntax().trim() + " ")) {
 
             if (LabyChatReply.lastUser == null) {
 
@@ -71,32 +77,34 @@ public class OnMessageSendListener implements MessageSendEvent {
             }
 
             String[] msg = s.split(" ");
-            int synlen = LabyChatReply.lmrSyntax.split(" ").length;
+            int synlen = LabyChatReply.getLmrSyntax().split(" ").length;
             ChatUser u = LabyChatReply.lastUser;
 
             if (msg.length < 1 + synlen) return true;
 
-            String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
+            String text = s.substring(LabyChatReply.getLmrSyntax().length() + 1).trim();
             sendLMCMessage(u, text);
             return true;
 
         }
         else if (LabyChatReply.cfcToggl) {
 
-            for (String k : LabyChatReply.cfc.keySet()) {
+            for (String k : LabyChatReply.getStorage().keySet()) {
 
-                String v = LabyChatReply.cfc.get(k);
+                String v = "/" + LabyChatReply.getStorage().get(k);
 
                 if (s.startsWith(v.trim() + " ")) {
 
-                    String[] msg = s.split(" ");
-                    int synlen = LabyChatReply.lmrSyntax.split(" ").length;
+                    String text = s.substring(v.length() + 1).trim();
 
-                    if (msg.length < 1 + synlen) return true;
+                    if (getChatUserByName(k) == null) {
 
-                    String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
+                        LabyChatReply.sendIngameString("§cSorry, we can't find the user with name '" + k + "'.");
+                        return true;
 
-                    ChatUser u = LabyMod.getInstance().getLabyConnect().getChatUserByUUID(UUID.fromString(k));
+                    }
+
+                    ChatUser u = LabyMod.getInstance().getLabyConnect().getChatUser(getChatUserByName(k));
 
                     sendLMCMessage(u, text);
                     return true;
@@ -137,6 +145,18 @@ public class OnMessageSendListener implements MessageSendEvent {
             }
 
         });
+
+    }
+
+    private ChatUser getChatUserByName(String name) {
+
+        for (ChatUser u : LabyMod.getInstance().getLabyConnect().getFriends()) {
+
+            if (u.getGameProfile().getName().equals(name)) return u;
+
+        }
+
+        return null;
 
     }
 

@@ -17,16 +17,14 @@ import java.util.UUID;
 public class LabyChatReply extends LabyModAddon {
 
     public ChatUser lastUser = null;
-    private String version = "1.1.8";
-
-    public String lmcSyntax = "lmc";
-    public String lmrSyntax = "lmc";
-
+    private String version = "1.2";
+    private String lmcSyntax = "lmc";
+    private String lmrSyntax = "lmc";
     public boolean msgToggl = true;
     public boolean cfcToggl = true;
-
-    public HashMap<String, String> cfc = new HashMap<>();
-
+    public boolean cfcUpdate = true;
+    private String cfcStorageS = "";
+    private HashMap<String, String> cfcStorage = new HashMap<>();
     private boolean updateCheck = false;
 
     @Override
@@ -91,37 +89,48 @@ public class LabyChatReply extends LabyModAddon {
 
     }
 
-    private void loadCFC() {
+    public void loadCFC() {
 
-        if (!this.cfc.isEmpty()) this.cfc.clear();
-        String[] cfcSplit = getConfig().get("LCR_CFC_STORAGE").getAsString().split("§§");
-        for (String s : cfcSplit) {
+        this.cfcStorageS = getConfig().get("LCR_CFC_STORAGE").getAsString();
 
-            String[] sSplit = s.split("§");
 
-            if (sSplit.length == 2) {
 
-                this.cfc.put(sSplit[0], sSplit[1]);
+        try {
+
+            HashMap<String, String> cfcCacheMap = new HashMap<>();
+
+            String[] splitter = this.cfcStorageS.split(";");
+            for (String s : splitter) {
+
+                String name = s.split(" ")[0];
+                String cmmd = s.substring(name.length() + 1);
+
+                cfcCacheMap.put(name, cmmd);
+                System.out.println("[LabyChatReply] Indexed custom syntax for '" + name + "': " + cmmd);
 
             }
 
+            if (!this.cfcStorage.isEmpty()) this.cfcStorage.clear();
+
+            this.cfcStorage = cfcCacheMap;
+            this.cfcUpdate = false;
+
         }
+        catch (Exception e) {
+
+
+
+        }
+
+
 
     }
 
-    private void saveCFC() {
+    private void saveCFC(String input) {
 
-        StringBuilder b = new StringBuilder();
-        for (String s : cfc.keySet()) {
-
-            b.append(s);
-            b.append("§");
-            b.append(cfc.get(s));
-            b.append("§§");
-
-        }
         getConfig().remove("LCR_CFC_STORAGE");
-        getConfig().addProperty("LCR_CFC_STORAGE", b.toString());
+        getConfig().addProperty("LCR_CFC_STORAGE", input);
+        cfcUpdate = true;
 
     }
 
@@ -132,18 +141,41 @@ public class LabyChatReply extends LabyModAddon {
         StringElement lmcSyntax = new StringElement("Chat message syntax", this, new ControlElement.IconData(Material.PAPER), "LCR_LMC_SYNTAX", this.lmcSyntax);
         StringElement lmrSyntax = new StringElement("QuickChat syntax", this, new ControlElement.IconData(Material.ARROW), "LCR_LMR_SYNTAX", this.lmrSyntax);
         BooleanElement msgToggle = new BooleanElement("Toggle message output", this, new ControlElement.IconData(Material.LEVER), "LCR_MSG_TOGGLE", this.msgToggl);
-        //BooleanElement cfcToggle = new BooleanElement("Toggle custom friend commands", this, new ControlElement.IconData(Material.SKULL), "LCR_CFC_TOGGLE", this.cfcToggl);
+        BooleanElement cfcToggle = new BooleanElement("Toggle custom friend commands", this, new ControlElement.IconData(Material.SKULL), "LCR_CFC_TOGGLE", this.cfcToggl);
         //HeaderElement upnext = new HeaderElement("Up next: Custom commands for direct messages");
 
+        HeaderElement cfc_note = new HeaderElement("§lCustom friend commands");
+        HeaderElement cfc_note1 = new HeaderElement("§oSyntax: '<Name> <cmd>;<Name> <cmd>;...'");
+        StringElement cfc_input = new StringElement("Custom syntax input", new ControlElement.IconData(Material.MAP), cfcStorageS, new Consumer<String>() {
+            @Override
+            public void accept(String s) {
 
+                saveCFC(s);
 
-        //cfcToggle.setSubSettings(new Settings().add(title));
+            }
+        });
+        ButtonElement cfc_clear = new ButtonElement("Reload syntax-list", new ControlElement.IconData(Material.REDSTONE), new Consumer<ButtonElement>() {
+            @Override
+            public void accept(ButtonElement buttonElement) {
+
+                loadCFC();
+
+            }
+        }, "Reload", "Reload the current syntax-list.", Color.RED);
+
+        Settings cfc_sub = new Settings();
+        cfc_sub.add(cfc_note);
+        cfc_sub.add(cfc_note1);
+        cfc_sub.add(cfc_clear);
+        cfc_sub.add(cfc_input);
+
+        cfcToggle.setSubSettings(cfc_sub);
 
         list.add(title);
         list.add(lmcSyntax);
         list.add(lmrSyntax);
         list.add(msgToggle);
-        //list.add(cfcToggle);
+        list.add(cfcToggle);
         //list.add(upnext);
 
 
@@ -189,7 +221,9 @@ public class LabyChatReply extends LabyModAddon {
 
     }
 
-
+    public String getLmcSyntax() { return this.lmcSyntax; }
+    public String getLmrSyntax() { return this.lmrSyntax; }
+    public HashMap<String, String> getStorage() { return this.cfcStorage; }
 
 
 
