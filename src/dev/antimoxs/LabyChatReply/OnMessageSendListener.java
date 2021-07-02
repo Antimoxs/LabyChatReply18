@@ -1,6 +1,7 @@
 package dev.antimoxs.LabyChatReply;
 
 import dev.antimoxs.LabyChatReply.LabyChatReply;
+import net.labymod.addon.AddonLoader;
 import net.labymod.api.events.MessageSendEvent;
 import net.labymod.labyconnect.LabyConnect;
 import net.labymod.labyconnect.log.MessageChatComponent;
@@ -10,9 +11,12 @@ import net.labymod.main.LabyMod;
 import net.minecraft.client.Minecraft;
 import tv.twitch.chat.Chat;
 
+import java.util.UUID;
+
 public class OnMessageSendListener implements MessageSendEvent {
 
     LabyChatReply LabyChatReply;
+    long cooldown = 0;
 
     public OnMessageSendListener(LabyChatReply LabyChatReply) {
 
@@ -23,6 +27,16 @@ public class OnMessageSendListener implements MessageSendEvent {
     @Override
     public boolean onSend(String s) {
 
+        if (s.startsWith("/lcr ")) {
+
+            if (s.equals("/lcr reload")) {
+
+                LabyChatReply.loadConfig();
+                return true;
+
+            }
+
+        }
 
         if (s.startsWith("/" + LabyChatReply.lmcSyntax.trim() + " ")) {
 
@@ -62,9 +76,36 @@ public class OnMessageSendListener implements MessageSendEvent {
 
             if (msg.length < 1 + synlen) return true;
 
-                String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
-                sendLMCMessage(u, text);
-                return true;
+            String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
+            sendLMCMessage(u, text);
+            return true;
+
+        }
+        else if (LabyChatReply.cfcToggl) {
+
+            for (String k : LabyChatReply.cfc.keySet()) {
+
+                String v = LabyChatReply.cfc.get(k);
+
+                if (s.startsWith(v.trim() + " ")) {
+
+                    String[] msg = s.split(" ");
+                    int synlen = LabyChatReply.lmrSyntax.split(" ").length;
+
+                    if (msg.length < 1 + synlen) return true;
+
+                    String text = s.substring(LabyChatReply.lmrSyntax.length() + 1).trim();
+
+                    ChatUser u = LabyMod.getInstance().getLabyConnect().getChatUserByUUID(UUID.fromString(k));
+
+                    sendLMCMessage(u, text);
+                    return true;
+
+                }
+
+
+
+            }
 
         }
 
@@ -78,11 +119,22 @@ public class OnMessageSendListener implements MessageSendEvent {
         LabyConnect c = LabyMod.getInstance().getLabyConnect();
         LabyChatReply.lastUser = u;
 
+        if (cooldown + 1000L > System.currentTimeMillis()) {
+
+            LabyChatReply.sendIngameString("§cHey! You are sending messages to fast.");
+            return;
+
+        }
+
+        cooldown = System.currentTimeMillis();
+
         Minecraft.getMinecraft().addScheduledTask(() -> {
 
             c.getChatlogManager().getChat(u).addMessage(new MessageChatComponent(me.getGameProfile().getName(), System.currentTimeMillis(), text));
             c.getChatlogManager().saveChatlogs(me.getGameProfile().getId());
-            LabyChatReply.sendIngameString("§f§l[" + me.getGameProfile().getName() + "§f§l] -> [" + u.getGameProfile().getName() + "§f§l]: §7" + text);
+            if (LabyChatReply.msgToggl) {
+                LabyChatReply.sendIngameString("§f§l[" + me.getGameProfile().getName() + "§f§l] -> [" + u.getGameProfile().getName() + "§f§l]: §7" + text);
+            }
 
         });
 
