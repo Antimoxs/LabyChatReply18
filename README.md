@@ -18,3 +18,7 @@ You are now able to make custom commands for friends within the ingame settings.
 Ingame commands matching the syntax:
 > /anti _message_<p>
 > /laby boi _message_
+  
+## Preview-Release-Information [v1.2.1]:
+  
+Added UUID support for the custom commands.
