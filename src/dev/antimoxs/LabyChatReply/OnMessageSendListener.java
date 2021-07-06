@@ -153,6 +153,7 @@ public class OnMessageSendListener implements MessageSendEvent {
         for (ChatUser u : LabyMod.getInstance().getLabyConnect().getFriends()) {
 
             if (u.getGameProfile().getName().equals(name)) return u;
+            if (u.getGameProfile().getId().toString().equals(name)) return u;
 
         }
 
