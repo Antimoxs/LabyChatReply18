@@ -1,38 +1,35 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+about: Create a bug report to help us improve our addon!
+title: "[BUG]"
+labels: bug
+assignees: Antimoxs
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Step 1 | Describe the bug**
+Please give us a detailed description of the bug and how it happened.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Step 2 | How to reproduce**
+List the steps to reproduce the behaviour:
+1. Open to '....'
+2. Scroll down to '....'
+3. Click '....'
+4. Bug here
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Step 3 | What you expected**
+Provide us with your thoughts regarding this bug and what should have happened in your opinion.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Step 4 | Attachments**
+If applicable, please add screenshots and your log file to the report.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Step 5 | Additional information**
+ - OS: [e.g. Windows/macOS/Linux] and version (ex: Windows 10 Home)
+ - Minecraft and LabyMod version (ex: Mc 1.8.9, LabyMod 3.8.40)
+ - Addon version (You can find it in the addons settings)
+ - Java version (make sure its the one, the mc profile starts on!; You can find it in the MC-Launcher profile)
+ - List of other LabyAddons you have installed
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Step 6 | Anything else?**
+Add any other information we should know here.
