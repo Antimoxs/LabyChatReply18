@@ -1,4 +1,4 @@
-# LabyChatReply for LabyMod 1.8.9 [v1.2] [![Gradle build](https://github.com/Antimoxs/LabyChatReply/actions/workflows/release.yml/badge.svg?branch=master)](https://github.com/Antimoxs/LabyChatReply/actions/workflows/release.yml)
+# LabyChatReply for LabyMod 1.8.9 [v1.3] [![Gradle build](https://github.com/Antimoxs/LabyChatReply/actions/workflows/release.yml/badge.svg?branch=master)](https://github.com/Antimoxs/LabyChatReply/actions/workflows/release.yml)
 by Antimoxs
 
 Reply to the LabyMod Chat ingame with LabyChatReply by Antimoxs. For more information join our discord: https://discord.gg/ATdbUS4
@@ -10,6 +10,14 @@ Reply to the LabyMod Chat ingame with LabyChatReply by Antimoxs. For more inform
 
 The syntax for both commands can now be changed in the addons settings.
 
+### New in 1.3
+You can now put UUIDs instead of names in the custom command input field to prevent the syntax from working when
+your friends change their name.
+
+> df66f7ab-d5eb-4d25-8d95-0d65bec4caee anti;LabyStudio laby boi;
+
+(Ingame commands will stay the same)
+
 ### New in 1.2
 You are now able to make custom commands for friends within the ingame settings. You can see the syntax on this example:
 
@@ -19,6 +27,3 @@ Ingame commands matching the syntax:
 > /anti _message_<p>
 > /laby boi _message_
   
-## Preview-Release-Information [v1.2.1]:
-  
-Added UUID support for the custom commands.
